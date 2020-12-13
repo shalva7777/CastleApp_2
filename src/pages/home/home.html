@@ -6,17 +6,18 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item-sliding *ngFor="let location of locations">
-      <ion-item [ngStyle]="{'border-left': '10px solid'}"  (click)="playAudio('http://192.168.100.5:8080/' + location.audioUrl);">
+    <ion-item-sliding *ngFor="let location of locations" (click)="detailPage(location)">
+      <ion-item [ngStyle]="{'border-left': '10px solid'}">
         <ion-avatar item-left>
-          <img src="{{'http://192.168.100.5:8080/' + location.imageUrl}}">
+          <img src="{{'http://192.168.100.5:8080/' + location.imageUrl}}" alt="">
         </ion-avatar>
         <div class="details">
-          <div class="f-14">{{location.id}}</div>
           <div class="f-14">{{location.name}}</div>
-          <div class="f-17">{{location.audioUrl}}</div>
         </div>
       </ion-item>
     </ion-item-sliding>
   </ion-list>
 </ion-content>
+
+
+

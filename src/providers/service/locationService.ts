@@ -3,9 +3,10 @@ import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import {BaseService} from "../auth/base.service";
 import {Storage} from "@ionic/storage";
-import {ToastController} from "ionic-angular";
+import {NavController, ToastController} from "ionic-angular";
 import {ActionResponseWithData} from "../../app/model/response/action-response-with-data";
 import {LightWeightLocation} from "../../app/model/lightWeightLocation";
+import {UserLogin} from "../../pages/user-login/user-login";
 
 /*declare let jquery: any;
 declare let $: any;*/
@@ -30,7 +31,6 @@ export class LocationService {
           return response;
         } else {
           ref.handleError(response);
-          return false;
         }
       });
     });
@@ -44,7 +44,7 @@ export class LocationService {
 
   handleError(a: ActionResponseWithData<any>) {
     let message: string;
-    if (!a.success && a.status === 401) {
+    if (a && !a.success && a.status === 401) {
       message = 'Login failed';
     } else {
       message = `Unexpected error`;

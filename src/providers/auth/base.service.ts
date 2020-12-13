@@ -66,7 +66,7 @@ export class BaseService<T> {
           })
           .catch(function (error) {
             loading.dismiss();
-            ref.handleError(error);
+            return ref.handleError(error);
           });
       }
     )
@@ -84,7 +84,7 @@ export class BaseService<T> {
           token = "";
         }
         ref.headers.append(`Token`, token);
-        return ref.http.get(SERVER_URL + `api/mobile/authorize`,  {headers: {'Authorization': token}})
+        return ref.http.get(SERVER_URL + `api/mobile/check-session`, {headers: {'Authorization': token}})
           .toPromise()
           .then(function (response) {
             loading.dismiss();
@@ -95,12 +95,11 @@ export class BaseService<T> {
           })
           .catch(function (error) {
             loading.dismiss();
-            ref.handleError(error);
+            return ref.handleError(error);
           });
       });
     });
   }
-
 
 
   getAuthorizedTourist(): Promise<any> {
@@ -110,23 +109,23 @@ export class BaseService<T> {
       spinner: 'bubbles'
     });
     return loading.present().then(() => {
-      return this.storage.get(this.tokenName).then(function (token) {
-        if (token == null) {
-          token = '';
-        }
+        return this.storage.get(this.tokenName).then(function (token) {
+          if (token == null) {
+            token = '';
+          }
 
-        return ref.http.get(`${SERVER_URL}` + ref.url + `authorized-tourist`, {headers: {'Authorization': token}})
-          .toPromise()
-          .then(function (response) {
-            loading.dismiss();
-            console.log(`authorized-tourist` + response);
-            return response;
-          })
-          .catch(function (error) {
-            loading.dismiss();
-            ref.handleError(error);
-          });
-      });
+          return ref.http.get(`${SERVER_URL}` + ref.url + `authorized-tourist`, {headers: {'Authorization': token}})
+            .toPromise()
+            .then(function (response) {
+              loading.dismiss();
+              console.log(`authorized-tourist` + response);
+              return response;
+            })
+            .catch(function (error) {
+              loading.dismiss();
+              return ref.handleError(error);
+            });
+        });
       }
     )
   }
@@ -155,7 +154,7 @@ export class BaseService<T> {
           })
           .catch(function (error) {
             loading.dismiss();
-            ref.handleError(error);
+            return ref.handleError(error);
           });
       });
     })
@@ -187,7 +186,7 @@ export class BaseService<T> {
           })
           .catch(function (error) {
             loading.dismiss();
-            ref.handleError(error);
+            return ref.handleError(error);
           });
       });
     });
@@ -207,15 +206,15 @@ export class BaseService<T> {
 
   handleError(error: any): Promise<any> {
     let message: string;
-    if (error.status && error.status === 401) {
+    if (error && error.status && error.status === 401) {
       let a: ActionResponse = new ActionResponse;
       a.success = false;
       a.status = error.status;
       return Promise.resolve(a);
     } else {
       let a: ActionResponse = new ActionResponse;
-      if (error.error.message) {
-        message = `Unexpected error: ${error.error.message}`;
+      if (error && error.error && JSON.parse(error.error).message) {
+        message = `Unexpected error: ${JSON.parse(error.error).message}`;
         a.success = false;
         a.status = error.status;
         a.message = error.error.message;

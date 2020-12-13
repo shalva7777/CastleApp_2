@@ -5,8 +5,6 @@ import {CastleApp} from './app.component';
 
 import {AboutPage} from '../pages/about/about';
 import {HomePage} from '../pages/home/home';
-import {TabsPage} from '../pages/tabs/tabs';
-
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {UserLogin} from "../pages/user-login/user-login";
@@ -16,14 +14,17 @@ import {HttpClientModule} from "@angular/common/http";
 import {IonicStorageModule} from "@ionic/storage";
 import {LocationService} from "../providers/service/locationService";
 import {JwtInterceptor} from "../providers/auth/JwtInterceptor";
+import {DetailPage} from "../pages/detail/detail";
+import {LightWeightLocation} from "./model/lightWeightLocation";
+import {AutoLogoutService} from "../providers/service/AutoLogoutService";
 
 @NgModule({
   declarations: [
     CastleApp,
     AboutPage,
     HomePage,
-    TabsPage,
     UserLogin,
+    DetailPage,
 
   ],
   imports: [
@@ -31,15 +32,16 @@ import {JwtInterceptor} from "../providers/auth/JwtInterceptor";
     IonicModule.forRoot(CastleApp),
     IonicStorageModule.forRoot(),
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     CastleApp,
     AboutPage,
     HomePage,
-    TabsPage,
     UserLogin,
+    DetailPage,
+
   ],
   providers: [
     StatusBar,
@@ -48,7 +50,10 @@ import {JwtInterceptor} from "../providers/auth/JwtInterceptor";
     BaseService,
     AuthService,
     LocationService,
-    JwtInterceptor
+    JwtInterceptor,
+    LightWeightLocation,
+    [LightWeightLocation],
+    AutoLogoutService
   ]
 })
 export class AppModule {}

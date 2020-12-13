@@ -1,12 +1,13 @@
-import {Injectable} from '@angular/core';
+import {Injectable, ViewChild} from '@angular/core';
 
 import 'rxjs/add/operator/toPromise';
 import {BaseService} from "./base.service";
 import {ActionResponse} from "../../app/model/response/action-response";
 import {Storage} from "@ionic/storage";
-import {ToastController} from "ionic-angular";
+import {Nav, ToastController} from "ionic-angular";
 import {ActionResponseWithData} from "../../app/model/response/action-response-with-data";
 import {Tourist} from "../../app/model/tourist";
+import {UserLogin} from "../../pages/user-login/user-login";
 
 /*declare let jquery: any;
 declare let $: any;*/
@@ -14,22 +15,27 @@ declare let $: any;*/
 @Injectable()
 export class AuthService {
 
+
   constructor(private baseService: BaseService<any>,
-              private readonly storage: Storage,
+              private storage: Storage,
               private toastCtrl: ToastController) {
   }
 
+  @ViewChild(Nav) nav: Nav;
+
   private tokenName = 'Token';
   private clientId = 'ClientId';
+
   // private url = 'api/mobile/';
 
   loginUser(request): Promise<boolean> {
     let ref = this;
     return this.baseService.login(request).then(response => {
-      if (response['success']) {
-        return ref.storage.set(ref.tokenName, response['data']).then(() => {
-          return true;
-        });
+      ref.storage.clear();
+      if (response) {
+        ref.storage.set(ref.tokenName, response['data'])
+        ref.storage.set('loginDate', Date.now());
+        return true;
       } else {
         ref.handleError(response);
         return false;
@@ -37,11 +43,7 @@ export class AuthService {
     });
   }
 
-  logout(): Promise<any> {
-    return this.storage.remove(this.tokenName).then(function (response) {
-      return response;
-    });
-  }
+
 
   checkSession(): Promise<ActionResponse> {
     console.log(`checkSession`);
@@ -69,10 +71,9 @@ export class AuthService {
 
   handleError(a: ActionResponseWithData<any>) {
     let message: string;
-    if (!a.success && a.status === 401) {
+    if (a && !a.success && a.status === 401) {
       message = 'Login failed';
-    }
-    else {
+    } else {
       message = `Unexpected error`;
     }
 
@@ -81,6 +82,6 @@ export class AuthService {
       duration: 5000,
       position: 'bottom'
     });
-    toast.present();
+    // toast.present();
   }
 }
