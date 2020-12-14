@@ -1,6 +1,7 @@
 import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {IonicPage, Navbar, NavController, NavParams, Platform, ToastController} from 'ionic-angular';
 import {LightWeightLocation} from "../../app/model/lightWeightLocation";
+import {RESOURCE_URL} from "../../config";
 import {Howl} from 'howler';
 
 /**
@@ -17,6 +18,7 @@ import {Howl} from 'howler';
 export class DetailPage implements  OnDestroy{
 
 
+  serverURL = RESOURCE_URL;
   locations: LightWeightLocation[];
   player: Howl = null;
 
@@ -57,7 +59,7 @@ export class DetailPage implements  OnDestroy{
       this.player.stop();
     }
     this.player = new Howl({
-      src: ['http://192.168.100.5:8080/' + location.audioUrl],
+      src: [`${this.serverURL}` + location.audioUrl],
       onplay: () => {
         this.isPlaying = true;
         this.activeLocation = location;

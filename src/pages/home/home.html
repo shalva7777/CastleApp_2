@@ -9,7 +9,7 @@
     <ion-item-sliding *ngFor="let location of locations" (click)="detailPage(location)">
       <ion-item [ngStyle]="{'border-left': '10px solid'}">
         <ion-avatar item-left>
-          <img src="{{'http://192.168.100.5:8080/' + location.imageUrl}}" alt="">
+          <img src="{{serverURL + location.imageUrl}}" alt="">
         </ion-avatar>
         <div class="details">
           <div class="f-14">{{location.name}}</div>

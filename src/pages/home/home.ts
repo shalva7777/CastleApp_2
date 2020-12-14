@@ -4,6 +4,8 @@ import {LocationService} from "../../providers/service/locationService";
 import {LightWeightLocation} from "../../app/model/lightWeightLocation";
 import {DetailPage} from "../detail/detail";
 import {AutoLogoutService} from "../../providers/service/AutoLogoutService";
+import {RESOURCE_URL} from "../../config";
+
 
 
 @Component({
@@ -13,6 +15,7 @@ import {AutoLogoutService} from "../../providers/service/AutoLogoutService";
 export class HomePage {
 
   locations: LightWeightLocation[];
+  serverURL = RESOURCE_URL;
 
   constructor(public navCtrl: NavController,
               public locationService: LocationService,

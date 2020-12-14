@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content style="text-align: center">
-  <img style="height: 100%; width: 100%;" src="{{'http://192.168.100.5:8080/' + activeLocation.imageUrl}}" alt="">
+  <img style="height: 100%; width: 100%;" src="{{serverURL + activeLocation.imageUrl}}" alt="">
 </ion-content>
 
 <ion-footer *ngIf="activeLocation">
